@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "api-key",
+      "type": "java.lang.String",
+      "description": "Description for api-key."
+    },
+    {
+      "name": "com.cloudinary.cloud_name",
+      "type": "java.lang.String",
+      "description": "Description for com.cloudinary.cloud_name."
+    }
+  ] }

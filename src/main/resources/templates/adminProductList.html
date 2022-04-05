@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="adminPortal :: head"><title>Admin</title></head>
+
+<body>
+<div th:replace="adminPortal :: navigation"></div>
+
+<div class="container">
+    <div class="table-responsive">
+        <table id="productListTable" class="table table-bordered table-hover table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Size</th>
+                <th>In Stock</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${adminProductList}">
+                <td th:text="${product.title}"></td>
+                <td th:text="${product.brand}"></td>
+                <td th:text="${product.category}"></td>
+                <td th:text="${product.price}"></td>
+                <td th:text="${product.size}"></td>
+                <td th:text="${product.inStockNumber}"></td>
+                <td>
+                    <form th:action="@{/admin/updateProduct/{id}(id=*{product.id})}" th:method="GET">
+                        <input type="submit" class="btn btn-primary" value="UPDATE"/>
+                    </form>
+                <form th:action="@{/admin/deleteProduct/{id}(id=*{product.id})}" th:method="POST">
+                    <input type="submit" class="btn btn-danger" value="DELETE"/>
+                </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:replace="adminPortal :: footer"></div>
+
+<script>
+    $(document).ready( function () {
+        $('#productListTable').DataTable({
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+            "ordering": false,
+            stateSave: true
+        });
+    } );
+</script>
+
+</body>
+</html>

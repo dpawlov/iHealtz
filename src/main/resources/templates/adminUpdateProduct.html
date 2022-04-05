@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="adminPortal :: head"><title>Admin</title></head>
+
+<body>
+<div th:replace="adminPortal :: navigation"></div>
+
+<div class="container">
+  <div class="row">
+    <form class="form-horizontal"
+          th:object="${updateProductBindingModel}"
+          th:action="@{/admin/updateProduct/{id}(id=*{id})}"
+          th:method="post"
+          enctype="multipart/form-data">
+      <fieldset>
+
+        <legend class="center-block">
+          Update Product Information<span style="font-size: small"> * is a
+							required field</span>
+        </legend>
+
+        <input hidden="hidden" name="id" th:value="${id}">
+
+        <!--                Title-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="title">* Title</label>
+          <div class="col-md-8">
+            <input th:field="*{title}" th:errorclass="bg-danger" type="text" class="form-control" id="title"
+                   name="title"
+                   required="required" placeholder="Title">
+            <span class="help-block">Title of the product</span>
+          </div>
+        </div>
+
+        <!--                Manufacturer-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="manufacturer">* Manufacturer</label>
+          <div class="col-md-8">
+            <input th:field="*{manufacturer}" th:errorclass="bg-danger" type="text" class="form-control"
+                   id="manufacturer" name="manufacturer"
+                   required="required" aria-describedby="manufacturer" placeholder="Manufacturer">
+            <span class="help-block">Manufacturer of the product</span>
+          </div>
+        </div>
+
+        <!--                Brand-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="brand">* Brand</label>
+          <div class="col-md-8">
+            <input th:field="*{brand}" th:errorclass="bg-danger" type="text" class="form-control" id="brand"
+                   name="brand"
+                   required="required" aria-describedby="brand" placeholder="Brand">
+            <span class="help-block">Brand of the product</span>
+          </div>
+        </div>
+
+        <!--                EXP-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="expirationDate">* EXP</label>
+          <div class="col-md-8">
+            <input th:field="*{expirationDate}" th:errorclass="bg-danger" type="date" class="form-control"
+                   id="expirationDate" name="expirationDate"
+                   required="required" aria-describedby="expirationDate"
+                   placeholder="Date first available">
+            <span class="help-block">Expiration date of the product.</span>
+          </div>
+        </div>
+
+        <!-- SIN -->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="sin">* SIN</label>
+          <div class="col-md-8">
+            <input th:field="*{sin}" th:errorclass="bg-danger" type="text" name="sin" class="form-control"
+                   id="sin" placeholder="SIN"/>
+            <span class="help-block">Standard Identification Number of the product.</span>
+          </div>
+        </div>
+
+        <!--                Category-->
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="category">* Category</label>
+          <div class="col-xs-8">
+            <select th:field="*{category}" th:errorclass="bg-danger" id="category" class="form-control"
+                    name="category">
+              <option value="" selected="selected" disabled="disabled">Please
+                select an option...
+              </option>
+              <option th:each="c : ${T(com.example.ihealtzstore.model.enums.EnumProductCategory).values()}"
+                      th:text="${c}" th:value="${c}"></option>
+            </select>
+            <span class="help-block">Select the category of the product.</span>
+          </div>
+        </div>
+
+        <!--                Flavour-->
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="flavour">* Flavour</label>
+          <div class="col-xs-8">
+            <select th:field="*{flavour}" th:errorclass="bg-danger" id="flavour" class="form-control" name="flavour">
+              <option value="" selected="selected" disabled="disabled">Please
+                select an option...
+              </option>
+              <option th:each="f : ${T(com.example.ihealtzstore.model.enums.EnumProductFlavour).values()}"
+                      th:text="${f}" th:value="${f}"> </option>
+            </select>
+            <span class="help-block">Select the flavour of the product.</span>
+          </div>
+        </div>
+
+        <!--                Size-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="size">* Size</label>
+          <div class="col-xs-8">
+            <div class="input-group">
+              <input th:field="*{size}" th:errorclass="bg-danger" type="number" class="form-control" id="size" name="size"
+                     required="required" aria-describedby="size" placeholder="Product size">
+              <span class="input-group-addon">KG/G</span>
+            </div>
+            <span class="help-block">Product size in kgs/grams.</span>
+          </div>
+        </div>
+
+        <!--                Allergen Information-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="allergenInformation">* Allergen Information</label>
+          <div class="col-md-8">
+            <input th:field="*{allergenInformation}" th:errorclass="bg-danger" type="text" class="form-control" id="allergenInformation" name="allergenInformation"
+                   required="required" aria-describedby="allergenInformation"
+                   placeholder="Allergen Information">
+            <span class="help-block">Allergen Information about the product.</span>
+          </div>
+        </div>
+
+        <!--                Price-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="price">* Price</label>
+          <div class="col-md-8">
+            <div class="input-group">
+              <span class="input-group-addon">$</span>
+              <input th:field="*{price}" th:errorclass="bg-danger" type="number" class="form-control" id="price"
+                     name="price" step="0.01"
+                     required="required" aria-describedby="price" placeholder="Product price">
+            </div>
+            <span class="help-block">Price of the product.</span>
+          </div>
+        </div>
+
+        <!--                Discount Price-->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="discountPrice">* Discount Price</label>
+          <div class="col-md-8">
+            <div class="input-group">
+              <span class="input-group-addon">$</span>
+              <input th:field="*{discountPrice}" th:errorclass="bg-danger" type="number" class="form-control" id="discountPrice"
+                     name="discountPrice" step="0.01"
+                     required="required" aria-describedby="discountPrice" placeholder="Discount Price">
+            </div>
+            <span class="help-block">Discount Price of the product.</span>
+          </div>
+        </div>
+
+        <!-- Status of product  -->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="status">* Status</label>
+          <div class="col-md-8">
+            <div class="input-group">
+              <input th:field="*{inStockNumber}" th:errorclass="bg-danger" type="number" class="form-control" id="status"
+                     name="inStockNumber" step="1"
+                     required="required" aria-describedby="inStockNumber" placeholder="In Stock Number">
+            </div>
+            <span class="help-block">Number of stock available.</span>
+          </div>
+        </div>
+
+        <!-- Suggested use -->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="suggestedUse">* Suggested use</label>
+          <div class="col-md-8">
+							<textarea th:field="*{suggestedUse}" th:errorclass="bg-danger" name="suggestedUse" rows="3" class="form-control" id="suggestedUse"
+                                      placeholder="Suggested Use"> </textarea>
+            <span class="help-block">Directions of how to use the product.</span>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="description">* Description</label>
+          <div class="col-md-8">
+							<textarea th:field="*{description}" th:errorclass="bg-danger" name="description" rows="5" class="form-control" id="description"
+                                      placeholder="Description"> </textarea>
+            <span class="help-block">Description of the product.</span>
+          </div>
+        </div>
+
+        <!-- Upload product image -->
+        <div class="form-group">
+          <div class="col-md-2">
+            <label for="productImage">* Upload product image</label>
+          </div>
+          <div class="col-md-8">
+            <input th:field="*{productImage}" th:errorclass="bg-danger" id="productImage" type="file" name="productImage"/>
+          </div>
+        </div>
+
+
+        <div class="form-group">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <button type="submit" class="btn btn-success">Update Product</button>
+            <a class="btn btn-danger" th:href="@{/admin/adminProductList}">Cancel</a>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+<div th:replace="adminPortal :: footer"></div>
+</body>
+</html>
