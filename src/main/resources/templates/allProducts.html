@@ -12,7 +12,7 @@
     <div class="col-xs-8">
       <h2 class="section-headline">
         <h2 class="section-headline">
-          <span th:text="${user}? ${#strings.toUpperCase(user.username)} : 'All Products'"></span>
+          <span th:text="${user}? 'Hello, ' + ${user.username} + ' here you can check our all products.' "></span>
         </h2>
       </h2>
     </div>

@@ -1,11 +1,13 @@
 package com.example.ihealtzstore.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -15,10 +17,20 @@ import java.math.BigDecimal;
 public class CartItemEntity extends BaseEntity {
 
     private int qty;
-    private BigDecimal subtotal;
+    private BigDecimal productPrice;
     private OrderEntity order;
     private ProductEntity product;
     private ShoppingCartEntity shoppingCart;
+    private List<ProductToCartItemEntity> productToCartItemList;
+
+    @OneToMany(mappedBy = "cartItem")
+    public List<ProductToCartItemEntity> getProductToCartItemList() {
+        return productToCartItemList;
+    }
+
+    public void setProductToCartItemList(List<ProductToCartItemEntity> productToCartItemList) {
+        this.productToCartItemList = productToCartItemList;
+    }
 
     @OneToOne
     public ProductEntity getProduct() {

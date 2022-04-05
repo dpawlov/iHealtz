@@ -17,6 +17,16 @@ public class ShoppingCartEntity extends BaseEntity {
 
     private BigDecimal totalSum;
     private List<CartItemEntity> cartItemList;
+    private UserEntity user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 
     @OneToMany(mappedBy = "shoppingCart")
     public List<CartItemEntity> getCartItemList() {

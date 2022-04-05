@@ -62,7 +62,7 @@ public class AdminController {
 
         adminService.addProduct(modelMapper.map(addProductBindingModel, AddProductServiceModel.class));
 
-        return "";
+        return "index";
 
     }
 

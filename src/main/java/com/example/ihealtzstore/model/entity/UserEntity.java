@@ -38,7 +38,7 @@ public class UserEntity extends BaseEntity {
         this.card = card;
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     public ShoppingCartEntity getShoppingCart() {
         return shoppingCart;
     }

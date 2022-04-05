@@ -1,6 +1,7 @@
 package com.example.ihealtzstore.service.impl;
 
 import com.example.ihealtzstore.model.entity.RoleEntity;
+import com.example.ihealtzstore.model.entity.ShoppingCartEntity;
 import com.example.ihealtzstore.model.entity.UserEntity;
 import com.example.ihealtzstore.model.enums.EnumRole;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
 
             RoleEntity adminRole = roleRepository.findByRole(EnumRole.ADMIN).orElse(null);
             RoleEntity userRole = roleRepository.findByRole(EnumRole.USER).orElse(null);
+            ShoppingCartEntity shoppingCartEntity = new ShoppingCartEntity();
 
             UserEntity admin = new UserEntity();
 
@@ -43,16 +45,20 @@ public class UserServiceImpl implements UserService {
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setEmail("admin@test.bg");
             admin.setRoles(List.of(adminRole, userRole));
+            admin.setShoppingCart(shoppingCartEntity);
+            shoppingCartEntity.setUser(admin);
 
             userRepository.save(admin);
 
             UserEntity user = new UserEntity();
 
-            user.setUsername("ivan");
-            user.setFullName("Ivan Cekov");
-            user.setPassword(passwordEncoder.encode("12345"));
-            user.setEmail("ivan@a.bg");
+            user.setUsername("user");
+            user.setFullName("User userov");
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setEmail("user@user");
             user.setRoles(List.of(userRole));
+            user.setShoppingCart(shoppingCartEntity);
+            shoppingCartEntity.setUser(user);
 
             userRepository.save(user);
 
