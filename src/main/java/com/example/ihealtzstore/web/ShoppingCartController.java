@@ -10,11 +10,9 @@ import com.example.ihealtzstore.service.ShoppingCartService;
 import com.example.ihealtzstore.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -74,5 +72,25 @@ public class ShoppingCartController {
         model.addAttribute("addProductSuccess", true);
 
         return "redirect:/products/productDetails?id=" + product.getId();
+    }
+
+    @PostMapping("/updateCartItem")
+    public String updateShoppingCart(
+            @ModelAttribute("id") Long cartItemId,
+            @ModelAttribute("qty") int qty
+    ) {
+        CartItemEntity cartItem = cartItemService.findById(cartItemId);
+        cartItem.setQty(qty);
+        cartItemService.updateCartItem(cartItem);
+
+        return "redirect:/shoppingCart/cart";
+    }
+
+    @GetMapping("/removeItem")
+    @Transactional
+    public String removeItem(@RequestParam("id") Long id) {
+        cartItemService.removeCartItem(cartItemService.findById(id));
+
+        return "redirect:/shoppingCart/cart";
     }
 }
