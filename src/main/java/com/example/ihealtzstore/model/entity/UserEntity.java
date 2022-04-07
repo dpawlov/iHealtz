@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -25,7 +26,7 @@ public class UserEntity extends BaseEntity {
     private ShoppingCartEntity shoppingCart;
     private List<RoleEntity> roles = new ArrayList<>();
     private List<OrderEntity> orders;
-
+    private List<UserShippingEntity> userShippingList;
 
 
     @OneToMany(mappedBy = "owner")
@@ -64,6 +65,15 @@ public class UserEntity extends BaseEntity {
 
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    public List<UserShippingEntity> getUserShippingList() {
+        return userShippingList;
+    }
+
+    public void setUserShippingList(List<UserShippingEntity> userShippingList) {
+        this.userShippingList = userShippingList;
     }
 
     public UserEntity addRole(RoleEntity roleEntity) {

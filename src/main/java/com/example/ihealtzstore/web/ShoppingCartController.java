@@ -87,7 +87,6 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/removeItem")
-    @Transactional
     public String removeItem(@RequestParam("id") Long id) {
         cartItemService.removeCartItem(cartItemService.findById(id));
 
