@@ -23,6 +23,7 @@ public class UserShippingEntity extends BaseEntity {
     private String userShippingCountry;
     private EnumCountryStates countryStates;
     private UserEntity user;
+    private OrderEntity order;
 
     @Enumerated(EnumType.STRING)
     public EnumCountryStates getCountryStates() {
@@ -41,5 +42,14 @@ public class UserShippingEntity extends BaseEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    @OneToOne
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
 }

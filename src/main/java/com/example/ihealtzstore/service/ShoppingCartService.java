@@ -4,4 +4,6 @@ import com.example.ihealtzstore.model.entity.ShoppingCartEntity;
 
 public interface ShoppingCartService {
     void updateShoppingCart(ShoppingCartEntity shoppingCartEntity);
+
+    void clearShoppingCart(ShoppingCartEntity shoppingCart);
 }

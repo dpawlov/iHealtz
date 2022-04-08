@@ -267,7 +267,7 @@
                                 <h4>Choose your shipping method:</h4>
                                 <div class="radio">
                                     <label> <input type="radio" name="shippingMethod"
-                                                   value="groundShipping" checked="checked" /> Ground Shipping
+                                                   value="standard" checked="checked" /> Standard Shipping
                                     </label>
                                 </div>
                                 <div class="radio">
@@ -288,7 +288,7 @@
                                     </div>
                                 </div>
 
-                                <!-- display products in cart -->
+                                <!-- Display products in cart -->
                                 <div class="row" th:each="cartItem : ${cartItemList}">
                                     <hr />
                                     <div class="col-xs-2">

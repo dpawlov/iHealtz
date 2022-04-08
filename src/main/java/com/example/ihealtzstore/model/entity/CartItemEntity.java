@@ -52,6 +52,7 @@ public class CartItemEntity extends BaseEntity {
     }
 
     @ManyToOne
+    @JoinColumn(name="order_id")
     public OrderEntity getOrder() {
         return order;
     }

@@ -32,7 +32,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 
         for (CartItemEntity cartItem : cartItemList) {
-            if(cartItem.getProduct().getInStockNumber() > 0) {
+            if (cartItem.getProduct().getInStockNumber() > 0) {
                 cartItemService.updateCartItem(cartItem);
                 cartTotalSum = cartTotalSum.add(cartItem.getProductPrice());
             }
@@ -42,4 +42,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartRepository.save(shoppingCartEntity);
 
     }
+
+    @Override
+    public void clearShoppingCart(ShoppingCartEntity shoppingCart) {
+        List<CartItemEntity> cartItemList = cartItemService.findByShoppingCart(shoppingCart);
+
+        for (CartItemEntity cartItem : cartItemList) {
+            cartItem.setShoppingCart(null);
+            cartItemService.save(cartItem);
+        }
+
+        shoppingCart.setTotalSum(new BigDecimal(0));
+
+        shoppingCartRepository.save(shoppingCart);
+    }
 }
+

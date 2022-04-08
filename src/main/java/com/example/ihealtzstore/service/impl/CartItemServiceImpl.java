@@ -79,4 +79,9 @@ public class CartItemServiceImpl implements CartItemService {
         productToCartItemRepository.deleteByCartItem(cartItem);
         cartItemRepository.delete(cartItem);
     }
+
+    @Override
+    public void save(CartItemEntity cartItem) {
+        cartItemRepository.save(cartItem);
+    }
 }

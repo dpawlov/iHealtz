@@ -1,17 +1,21 @@
 package com.example.ihealtzstore.web;
 
-import com.example.ihealtzstore.model.entity.CartItemEntity;
-import com.example.ihealtzstore.model.entity.CreditCardEntity;
-import com.example.ihealtzstore.model.entity.UserEntity;
-import com.example.ihealtzstore.model.entity.UserShippingEntity;
+import com.example.ihealtzstore.model.entity.*;
+import com.example.ihealtzstore.repository.OrderRepository;
 import com.example.ihealtzstore.service.CartItemService;
+import com.example.ihealtzstore.service.OrderService;
+import com.example.ihealtzstore.service.ShoppingCartService;
 import com.example.ihealtzstore.service.UserService;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -19,10 +23,16 @@ public class CheckoutController {
 
     private final UserService userService;
     private final CartItemService cartItemService;
+    private final OrderService orderService;
+    private final ShoppingCartService shoppingCartService;
+    private final OrderRepository orderRepository;
 
-    public CheckoutController(UserService userService, CartItemService cartItemService) {
+    public CheckoutController(UserService userService, CartItemService cartItemService, OrderService orderService, ShoppingCartService shoppingCartService, OrderRepository orderRepository) {
         this.userService = userService;
         this.cartItemService = cartItemService;
+        this.orderService = orderService;
+        this.shoppingCartService = shoppingCartService;
+        this.orderRepository = orderRepository;
     }
 
     @GetMapping("/checkout")
@@ -62,5 +72,37 @@ public class CheckoutController {
 
         return "checkout";
 
+    }
+
+    @PostMapping("/checkout")
+    public String checkoutConfirm(@ModelAttribute("shippingAddress") UserShippingEntity shippingAddress,
+                                  @ModelAttribute("payment") CreditCardEntity payment,
+                                  @ModelAttribute("shippingMethod") String shippingMethod,
+                                  Principal principal, Model model) {
+        ShoppingCartEntity shoppingCart = userService.findByUsername(principal.getName()).getShoppingCart();
+
+        List<CartItemEntity> cartItemList = cartItemService.findByShoppingCart(shoppingCart);
+        model.addAttribute("cartItemList", cartItemList);
+
+        UserEntity user = userService.findByUsername(principal.getName());
+
+        OrderEntity order = orderService.createOrder(shoppingCart, shippingAddress, payment, shippingMethod, user);
+
+        shoppingCartService.clearShoppingCart(shoppingCart);
+
+        LocalDate today = LocalDate.now();
+        LocalDate estimatedDeliveryDate;
+
+        if (shippingMethod.equals("standard")) {
+            estimatedDeliveryDate = today.plusDays(5);
+        } else {
+            estimatedDeliveryDate = today.plusDays(3);
+        }
+
+        model.addAttribute("estimatedDeliveryDate", estimatedDeliveryDate);
+
+        orderRepository.save(order);
+
+        return "orderSubmittedPage";
     }
 }
