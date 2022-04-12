@@ -14,25 +14,14 @@ import javax.persistence.*;
 @Table(name = "user_shipping_addresses")
 public class UserShippingEntity extends BaseEntity {
 
-    private String userShippingName;
+    private String userReceiverName;
     private String userShippingStreet1;
     private String userShippingStreet2;
     private String userShippingCity;
     private String userShippingState;
     private String userShippingZipcode;
-    private String userShippingCountry;
-    private EnumCountryStates countryStates;
     private UserEntity user;
     private OrderEntity order;
-
-    @Enumerated(EnumType.STRING)
-    public EnumCountryStates getCountryStates() {
-        return countryStates;
-    }
-
-    public void setCountryStates(EnumCountryStates countryStates) {
-        this.countryStates = countryStates;
-    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")

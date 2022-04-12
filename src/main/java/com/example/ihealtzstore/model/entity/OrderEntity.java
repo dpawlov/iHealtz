@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class OrderEntity extends BaseEntity {
 
     private Date orderDate;
-    private Date shippingDate;
+    private LocalDate shippingDate;
     private String shippingMethod;
     private String orderStatus;
     private BigDecimal orderTotal;

@@ -15,6 +15,7 @@ public class CreditCardEntity extends BaseEntity{
 
     private String cardName;
     private String cardNumber;
+    private String type;
     private int expiryMonth;
     private int expiryYear;
     private int cvc;

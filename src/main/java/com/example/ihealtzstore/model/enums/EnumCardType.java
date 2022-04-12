@@ -1,6 +1,6 @@
 package com.example.ihealtzstore.model.enums;
 
-public enum EnumCard {
+public enum EnumCardType {
     VISA,
     MASTERCARD,
     DISCOVER,

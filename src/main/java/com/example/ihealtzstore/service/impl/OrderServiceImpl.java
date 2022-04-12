@@ -6,6 +6,7 @@ import com.example.ihealtzstore.service.CartItemService;
 import com.example.ihealtzstore.service.OrderService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 
@@ -24,11 +25,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderEntity createOrder(ShoppingCartEntity shoppingCart, UserShippingEntity shippingAddress, CreditCardEntity payment, String shippingMethod, UserEntity user) {
 
+        //ORDER
         OrderEntity order = new OrderEntity();
         order.setOrderStatus("created");
         order.setPayment(payment);
         order.setShippingAddress(shippingAddress);
         order.setShippingMethod(shippingMethod);
+        order.setUser(user);
+
 
         List<CartItemEntity> cartItemList = cartItemService.findByShoppingCart(shoppingCart);
 
@@ -41,9 +45,22 @@ public class OrderServiceImpl implements OrderService {
         order.setCartItemList(cartItemList);
         order.setOrderDate(Calendar.getInstance().getTime());
         order.setOrderTotal(shoppingCart.getTotalSum());
-        shippingAddress.setOrder(order);
+
+        LocalDate today = LocalDate.now();
+        if (shippingMethod.equals("standard")) {
+            order.setShippingDate(today.plusDays(5));
+        } else {
+            order.setShippingDate(today.plusDays(3));
+        }
+
+        //PAYMENT
         payment.setOrder(order);
-        order.setUser(user);
+        payment.setOwner(user);
+
+        //SHIPPING ADDRESS
+        shippingAddress.setOrder(order);
+        shippingAddress.setUser(user);
+
         order = orderRepository.save(order);
 
         return order;
