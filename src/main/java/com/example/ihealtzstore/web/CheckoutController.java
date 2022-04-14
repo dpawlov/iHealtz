@@ -88,7 +88,6 @@ public class CheckoutController {
 
         OrderEntity order = orderService.createOrder(shoppingCart, shippingAddress, payment, shippingMethod, user);
 
-        shoppingCartService.clearShoppingCart(shoppingCart);
 
         LocalDate today = LocalDate.now();
         LocalDate estimatedDeliveryDate;
@@ -102,6 +101,7 @@ public class CheckoutController {
         model.addAttribute("estimatedDeliveryDate", estimatedDeliveryDate);
 
         orderRepository.save(order);
+        shoppingCartService.clearShoppingCart(shoppingCart);
 
         return "orderSubmittedPage";
     }

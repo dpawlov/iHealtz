@@ -1,19 +1,21 @@
 package com.example.ihealtzstore.web;
 
+import com.example.ihealtzstore.model.binding.UserProfileUpdateBindingModel;
 import com.example.ihealtzstore.model.binding.UserRegistrationBindingModel;
+import com.example.ihealtzstore.model.entity.UserEntity;
+import com.example.ihealtzstore.model.service.UpdateProductServiceModel;
+import com.example.ihealtzstore.model.service.UserProfileUpdateServiceModel;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
 import com.example.ihealtzstore.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/users")
@@ -121,7 +123,42 @@ public class UserController {
         attributes.addFlashAttribute("username", username);
         attributes.addFlashAttribute("notLogged", true);
         return "redirect:login";
+    }
 
+    @GetMapping("/profile")
+    public String userProfile(Model model,
+                              Principal principal) {
+
+        if (principal != null) {
+            String username = principal.getName();
+            model.addAttribute("user", userService.findByUsername(username));
+        }
+
+        return "userProfile";
+    }
+
+
+    //TODO
+    @PostMapping("/profile/{id{}")
+    public String userProfileUpdate(@PathVariable Long id,
+                                    @Valid UserProfileUpdateBindingModel userProfileUpdateBindingModel,
+                                    BindingResult bindingResult,
+                                    RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+
+            redirectAttributes.addFlashAttribute("userProfileUpdateBindingModel", userProfileUpdateBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateBindingModel", bindingResult);
+
+            return "redirect:/userProfile";
+        }
+
+        UserProfileUpdateServiceModel serviceModel = modelMapper.map(userProfileUpdateBindingModel,
+                UserProfileUpdateServiceModel.class);
+
+        userService.updateUserProfile(serviceModel);
+
+        return "userProfile";
     }
 }
 

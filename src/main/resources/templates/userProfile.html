@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/fragment :: head">
+
+</head>
+
+<body>
+
+<nav th:replace="fragments/fragment :: navigation"></nav>
+
+
+<div class="container">
+  <div class="row" style="margin-left: 200px">
+    <div class="col-lg-8">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a href="" data-target="#messages" data-toggle="tab" class="nav-link">Orders</a>
+        </li>
+        <li class="nav-item">
+          <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit</a>
+        </li>
+      </ul>
+      <div class="tab-content py-4">
+        <div class="panel-body" id="profile">
+          <h4> <span th:text="${user}? 'Hello, ' + ${user.username} + ' here you can check your profile details.' "></span> </h4>
+          <div class="row">
+            <div class="col-md-4">
+              <h7>Username</h7>
+              <p th:text="${user.username}"> </p>
+              <h7>Full name</h7>
+              <p th:text="${user.fullName}"> </p>
+              <h7>Email</h7>
+              <p th:text="${user.email}"></p>
+            </div>
+          </div>
+        </div>
+
+<!--        Orders-->
+        <div class="tab-pane" id="messages">
+          <div class="alert alert-info alert-dismissable">
+            <a class="panel-close close" data-dismiss="alert">×</a> Here you can check your orders.
+          </div>
+          <table class="table table-hover table-striped">
+            <tbody>
+            <tr>
+              <td>
+                <span th:text="${#lists.size(user.orders.size())}" class="float-right font-weight-bold"> </span> is the number of orders you have placed.
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+<!--        Edit-->
+        <div class="tab-pane" id="edit">
+          <form role="form"
+                th:object="${userProfileUpdateBindingModel}"
+                th:action="@{/users/profile}"
+                th:method="POST">
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Username</label>
+              <div class="col-lg-9">
+                <input th:field="*{username}" th:errorclass="bg-danger"
+                       class="form-control" type="text"
+                       name="username"
+                       id="username"
+                       placeholder="username">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Full Name</label>
+              <div class="col-lg-9">
+                <input th:field="*{fullName}" th:errorclass="bg-danger"
+                       class="form-control" type="text" placeholder="full name">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Email</label>
+              <div class="col-lg-9">
+                <input th:field="*{email}" class="form-control" type="email" placeholder="email@email">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Password</label>
+              <div class="col-lg-9">
+                <input th:field="*{password}" class="form-control" type="password" placeholder="password">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label">Confirm password</label>
+              <div class="col-lg-9">
+                <input th:field="*{confirmPassword}" class="form-control" type="password" placeholder="confirm password">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-lg-3 col-form-label form-control-label"></label>
+              <div class="col-lg-9">
+                <input type="reset" class="btn btn-secondary" value="Cancel">
+                <input type="button" class="btn btn-primary" value="Save Changes">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<footer th:replace="fragments/fragment :: footer"></footer>
+</body>
+</html>

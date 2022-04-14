@@ -1,7 +1,9 @@
 package com.example.ihealtzstore.service;
 
 import com.example.ihealtzstore.model.entity.UserEntity;
+import com.example.ihealtzstore.model.service.UserProfileUpdateServiceModel;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
+import com.example.ihealtzstore.model.view.UserView;
 
 public interface UserService {
 
@@ -14,4 +16,6 @@ public interface UserService {
     void initializeUsers();
 
     UserEntity findByUsername(String username);
+
+    void updateUserProfile(UserProfileUpdateServiceModel userProfileUpdateServiceModel);
 }
