@@ -1,7 +1,10 @@
 package com.example.ihealtzstore.model.service;
+import com.example.ihealtzstore.model.entity.OrderEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,4 +16,5 @@ public class UserProfileUpdateServiceModel {
     private String fullName;
     private String email;
     private String password;
+    private List<OrderEntity> orders;
 }

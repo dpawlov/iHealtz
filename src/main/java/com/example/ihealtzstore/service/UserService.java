@@ -17,5 +17,8 @@ public interface UserService {
 
     UserEntity findByUsername(String username);
 
+
+    UserEntity findById(Long id);
+
     void updateUserProfile(UserProfileUpdateServiceModel userProfileUpdateServiceModel);
 }

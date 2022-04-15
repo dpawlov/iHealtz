@@ -73,16 +73,23 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username).orElse(null);
     }
 
+
+    @Override
+    public UserEntity findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     @Override
     public void updateUserProfile(UserProfileUpdateServiceModel userProfileUpdateServiceModel) {
-        UserEntity userEntity = userRepository.findById(userProfileUpdateServiceModel.getId()).orElseThrow(() ->
-                new ObjectNotFoundException("User with id " + userProfileUpdateServiceModel.getId() + " not found!"));
+            UserEntity userEntity = userRepository.findById(userProfileUpdateServiceModel.getId()).orElseThrow(() ->
+                    new ObjectNotFoundException("User with id " + userProfileUpdateServiceModel.getId() + " not found!"));
 
-           userEntity.setUsername(userProfileUpdateServiceModel.getUsername());
-           userEntity.setFullName(userProfileUpdateServiceModel.getFullName());
-           userEntity.setEmail(userProfileUpdateServiceModel.getEmail());
+            userEntity.setUsername(userProfileUpdateServiceModel.getUsername());
+            userEntity.setFullName(userProfileUpdateServiceModel.getFullName());
+            userEntity.setEmail(userProfileUpdateServiceModel.getEmail());
+            userEntity.setPassword(userProfileUpdateServiceModel.getPassword());
 
-           userRepository.save(userEntity);
+            userRepository.save(userEntity);
     }
 
 

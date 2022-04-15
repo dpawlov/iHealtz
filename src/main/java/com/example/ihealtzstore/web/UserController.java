@@ -125,6 +125,7 @@ public class UserController {
         return "redirect:login";
     }
 
+
     @GetMapping("/profile")
     public String userProfile(Model model,
                               Principal principal) {
@@ -138,9 +139,24 @@ public class UserController {
     }
 
 
-    //TODO
-    @PostMapping("/profile/{id{}")
-    public String userProfileUpdate(@PathVariable Long id,
+
+    @GetMapping("/profileEdit/{id}")
+    public String updateProfile(@PathVariable Long id,
+                              Model model) {
+
+       UserEntity user = userService.findById(id);
+
+       UserProfileUpdateBindingModel userProfileUpdateBindingModel = modelMapper.map(
+               user, UserProfileUpdateBindingModel.class);
+
+       model.addAttribute("userProfileUpdateBindingModel", userProfileUpdateBindingModel);
+
+        return "userUpdateProfile";
+    }
+
+
+    @PostMapping("/profileEdit/{id}")
+    public String userProfileUpdateConfirm(@PathVariable Long id,
                                     @Valid UserProfileUpdateBindingModel userProfileUpdateBindingModel,
                                     BindingResult bindingResult,
                                     RedirectAttributes redirectAttributes) {
@@ -150,15 +166,12 @@ public class UserController {
             redirectAttributes.addFlashAttribute("userProfileUpdateBindingModel", userProfileUpdateBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateBindingModel", bindingResult);
 
-            return "redirect:/userProfile";
+            return "redirect:/users/profileEdit/" + id;
         }
 
-        UserProfileUpdateServiceModel serviceModel = modelMapper.map(userProfileUpdateBindingModel,
-                UserProfileUpdateServiceModel.class);
+        userService.updateUserProfile(modelMapper.map(userProfileUpdateBindingModel, UserProfileUpdateServiceModel.class));
 
-        userService.updateUserProfile(serviceModel);
-
-        return "userProfile";
+        return "userUpdateProfile";
     }
 }
 
