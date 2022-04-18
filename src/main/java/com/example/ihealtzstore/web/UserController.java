@@ -1,10 +1,9 @@
 package com.example.ihealtzstore.web;
 
-import com.example.ihealtzstore.model.binding.UserProfileUpdateBindingModel;
+import com.example.ihealtzstore.model.binding.UserPasswordUpdateBindingModel;
 import com.example.ihealtzstore.model.binding.UserRegistrationBindingModel;
 import com.example.ihealtzstore.model.entity.UserEntity;
-import com.example.ihealtzstore.model.service.UpdateProductServiceModel;
-import com.example.ihealtzstore.model.service.UserProfileUpdateServiceModel;
+import com.example.ihealtzstore.model.service.UserPasswordUpdateServiceModel;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
 import com.example.ihealtzstore.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -32,13 +31,10 @@ public class UserController {
 
 
     // Model Attribute
-
     @ModelAttribute("registrationBindingModel")
     public UserRegistrationBindingModel createBindingModel() {
         return new UserRegistrationBindingModel();
     }
-
-    // END
 
 
     // GetMapping
@@ -139,39 +135,44 @@ public class UserController {
     }
 
 
-
-    @GetMapping("/profileEdit/{id}")
+    @GetMapping("/editPassword/{id}")
     public String updateProfile(@PathVariable Long id,
-                              Model model) {
+                                Model model) {
 
-       UserEntity user = userService.findById(id);
+        UserEntity user = userService.findById(id);
 
-       UserProfileUpdateBindingModel userProfileUpdateBindingModel = modelMapper.map(
-               user, UserProfileUpdateBindingModel.class);
+        UserPasswordUpdateBindingModel userPasswordUpdateBindingModel = modelMapper.map(
+                user, UserPasswordUpdateBindingModel.class);
 
-       model.addAttribute("userProfileUpdateBindingModel", userProfileUpdateBindingModel);
+        model.addAttribute("passwordIsNotEqual", false);
+        model.addAttribute("userPasswordUpdateBindingModel", userPasswordUpdateBindingModel);
 
-        return "userUpdateProfile";
+
+        return "passwordUpdate";
     }
 
-
-    @PostMapping("/profileEdit/{id}")
+    @PostMapping("/editPassword/{id}")
     public String userProfileUpdateConfirm(@PathVariable Long id,
-                                    @Valid UserProfileUpdateBindingModel userProfileUpdateBindingModel,
-                                    BindingResult bindingResult,
-                                    RedirectAttributes redirectAttributes) {
+                                           @Valid UserPasswordUpdateBindingModel userPasswordUpdateBindingModel,
+                                           BindingResult bindingResult,
+                                           RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userPasswordUpdateBindingModel", userPasswordUpdateBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userPasswordUpdateBindingModel", bindingResult);
 
-            redirectAttributes.addFlashAttribute("userProfileUpdateBindingModel", userProfileUpdateBindingModel);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userProfileUpdateBindingModel", bindingResult);
-
-            return "redirect:/users/profileEdit/" + id;
+            return "redirect:/users/editPassword/" + id;
         }
 
-        userService.updateUserProfile(modelMapper.map(userProfileUpdateBindingModel, UserProfileUpdateServiceModel.class));
+        if (!userPasswordUpdateBindingModel.getNewPassword().equals(userPasswordUpdateBindingModel.getConfirmNewPassword())) {
+            redirectAttributes.addFlashAttribute("userPasswordUpdateBindingModel", userPasswordUpdateBindingModel);
+            redirectAttributes.addFlashAttribute("passwordIsNotEqual", true);
+            return "redirect:/users/editPassword/" + id;
+        }
 
-        return "userUpdateProfile";
+        userService.updateUserPassword(modelMapper.map(userPasswordUpdateBindingModel, UserPasswordUpdateServiceModel.class));
+
+        return "passwordUpdate";
     }
 }
 

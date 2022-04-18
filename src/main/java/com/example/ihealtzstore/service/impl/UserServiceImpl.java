@@ -4,14 +4,14 @@ import com.example.ihealtzstore.model.entity.RoleEntity;
 import com.example.ihealtzstore.model.entity.ShoppingCartEntity;
 import com.example.ihealtzstore.model.entity.UserEntity;
 import com.example.ihealtzstore.model.enums.EnumRole;
-import com.example.ihealtzstore.model.service.UserProfileUpdateServiceModel;
+import com.example.ihealtzstore.model.service.UserPasswordUpdateServiceModel;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
-import com.example.ihealtzstore.model.view.UserView;
 import com.example.ihealtzstore.repository.RoleRepository;
 import com.example.ihealtzstore.repository.UserRepository;
 import com.example.ihealtzstore.service.UserService;
 import com.example.ihealtzstore.web.exception.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -80,16 +80,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserProfile(UserProfileUpdateServiceModel userProfileUpdateServiceModel) {
-            UserEntity userEntity = userRepository.findById(userProfileUpdateServiceModel.getId()).orElseThrow(() ->
-                    new ObjectNotFoundException("User with id " + userProfileUpdateServiceModel.getId() + " not found!"));
+    public void updateUserPassword(UserPasswordUpdateServiceModel userPasswordUpdateServiceModel) {
+        UserEntity userEntity = userRepository.findById(userPasswordUpdateServiceModel.getId()).orElseThrow(() ->
+                new ObjectNotFoundException("User with id " + userPasswordUpdateServiceModel.getId() + " not found!"));
 
-            userEntity.setUsername(userProfileUpdateServiceModel.getUsername());
-            userEntity.setFullName(userProfileUpdateServiceModel.getFullName());
-            userEntity.setEmail(userProfileUpdateServiceModel.getEmail());
-            userEntity.setPassword(userProfileUpdateServiceModel.getPassword());
 
-            userRepository.save(userEntity);
+        userEntity.setPassword(passwordEncoder.encode(userPasswordUpdateServiceModel.getNewPassword()));
+
+        userRepository.save(userEntity);
     }
 
 

@@ -1,9 +1,9 @@
 package com.example.ihealtzstore.service;
 
+import com.example.ihealtzstore.model.binding.UserPasswordUpdateBindingModel;
 import com.example.ihealtzstore.model.entity.UserEntity;
-import com.example.ihealtzstore.model.service.UserProfileUpdateServiceModel;
+import com.example.ihealtzstore.model.service.UserPasswordUpdateServiceModel;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
-import com.example.ihealtzstore.model.view.UserView;
 
 public interface UserService {
 
@@ -20,5 +20,6 @@ public interface UserService {
 
     UserEntity findById(Long id);
 
-    void updateUserProfile(UserProfileUpdateServiceModel userProfileUpdateServiceModel);
+
+    void updateUserPassword(UserPasswordUpdateServiceModel userPasswordUpdateServiceModel);
 }
