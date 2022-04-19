@@ -6,7 +6,10 @@ import com.example.ihealtzstore.model.entity.UserEntity;
 import com.example.ihealtzstore.model.service.UserPasswordUpdateServiceModel;
 import com.example.ihealtzstore.model.service.UserRegistrationServiceModel;
 import com.example.ihealtzstore.service.UserService;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,13 +23,14 @@ import java.security.Principal;
 @RequestMapping("/users")
 public class UserController {
 
-
     private final ModelMapper modelMapper;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(ModelMapper modelMapper, UserService userService) {
+    public UserController(ModelMapper modelMapper, UserService userService, PasswordEncoder passwordEncoder) {
         this.modelMapper = modelMapper;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -144,7 +148,16 @@ public class UserController {
         UserPasswordUpdateBindingModel userPasswordUpdateBindingModel = modelMapper.map(
                 user, UserPasswordUpdateBindingModel.class);
 
-        model.addAttribute("passwordIsNotEqual", false);
+        if (!model.containsAttribute("userPasswordUpdateBindingModel")) {
+            model.addAttribute("userPasswordUpdateBindingModel", new UserPasswordUpdateBindingModel());
+            model.addAttribute("passwordIsNotEqual", false);
+        }
+
+        if (!model.containsAttribute("userPasswordUpdateBindingModel")) {
+            model.addAttribute("userPasswordUpdateBindingModel", new UserPasswordUpdateBindingModel());
+            model.addAttribute("currentPasswordNotEqual", false);
+        }
+
         model.addAttribute("userPasswordUpdateBindingModel", userPasswordUpdateBindingModel);
 
 
@@ -156,6 +169,8 @@ public class UserController {
                                            @Valid UserPasswordUpdateBindingModel userPasswordUpdateBindingModel,
                                            BindingResult bindingResult,
                                            RedirectAttributes redirectAttributes) {
+
+        UserEntity user = userService.findById(id);
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("userPasswordUpdateBindingModel", userPasswordUpdateBindingModel);
@@ -169,6 +184,13 @@ public class UserController {
             redirectAttributes.addFlashAttribute("passwordIsNotEqual", true);
             return "redirect:/users/editPassword/" + id;
         }
+
+        if (!passwordEncoder.matches(userPasswordUpdateBindingModel.getOldPassword(), user.getPassword())) {
+            redirectAttributes.addFlashAttribute("userPasswordUpdateBindingModel", userPasswordUpdateBindingModel);
+            redirectAttributes.addFlashAttribute("currentPasswordNotEqual", true);
+            return "redirect:/users/editPassword/" + id;
+        }
+
 
         userService.updateUserPassword(modelMapper.map(userPasswordUpdateBindingModel, UserPasswordUpdateServiceModel.class));
 

@@ -83,8 +83,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserPassword(UserPasswordUpdateServiceModel userPasswordUpdateServiceModel) {
         UserEntity userEntity = userRepository.findById(userPasswordUpdateServiceModel.getId()).orElseThrow(() ->
                 new ObjectNotFoundException("User with id " + userPasswordUpdateServiceModel.getId() + " not found!"));
-
-
+        
         userEntity.setPassword(passwordEncoder.encode(userPasswordUpdateServiceModel.getNewPassword()));
 
         userRepository.save(userEntity);

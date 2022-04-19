@@ -31,12 +31,9 @@ public class iHealtzUserService implements UserDetailsService {
         boolean demo = userRepository.existsByUsername(username);
 
 
-
         UserEntity userEntity =
                 userRepository.findByUsername(username)
                         .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " was not found."));
-
-
 
 
         return mapToUserDetails(userEntity);

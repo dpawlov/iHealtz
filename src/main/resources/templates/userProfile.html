@@ -31,9 +31,9 @@
                             <p th:text="${user.fullName}"> </p>
                             <h7>Email</h7>
                             <p th:text="${user.email}"></p>
-                            <a th:href="@{/users/editPassword/{id}(id=*{user.id})}">Want to update your password? Click here!</a><br/>
                         </div>
                     </div>
+                    <a th:href="@{/users/editPassword/{id}(id=*{user.id})}">Want to update your password? Click here!</a><br/>
                 </div>
 
                     <!--        Orders-->
